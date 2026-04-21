@@ -71,6 +71,21 @@ ENABLED = true;
 
 GRANT USAGE ON INTEGRATION PYPI_ACCESS_INTEGRATION TO ROLE DEMO_ROLE;
 
+SELECT * FROM INFORMATION_SCHEMA.PACKAGES WHERE LANGUAGE = 'python' AND PACKAGE_NAME ILIKE '%openpyxl%';
+
+CREATE OR REPLACE PROCEDURE DEMO_DB.DEV_SCHEMA.LOAD_EXCEL_PROC()
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.11'
+PACKAGES = ('snowflake-snowpark-python', 'openpyxl', 'pandas')
+HANDLER = 'main'
+AS
+$$
+def main(session):
+    import pandas as pd
+    # Your code here
+    return "Done"
+$$;
 
 -- ----------------------------------------------------------------------------
 -- Create the event table
@@ -83,3 +98,21 @@ GRANT INSERT ON EVENT TABLE DEMO_DB.INTEGRATIONS.DEMO_EVENTS TO ROLE DEMO_ROLE;
 
 ALTER ACCOUNT SET EVENT_TABLE = DEMO_DB.INTEGRATIONS.DEMO_EVENTS;
 ALTER DATABASE DEMO_DB SET LOG_LEVEL = INFO;
+
+-- drop schema demo_db.additional_packages;
+
+use role demo_role;
+
+create schema if not exists demo_db.additional_packages;
+
+create stage if not exists python_packages;
+
+list  @demo_db.additional_packages.python_packages;
+
+SELECT * FROM DIRECTORY('@demo_db.additional_packages.python_packages');
+
+
+list @integrations.frostbyte_raw_stage;
+
+describe stage integrations.frostbyte_raw_stage;
+
