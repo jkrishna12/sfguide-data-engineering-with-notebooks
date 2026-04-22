@@ -65,12 +65,16 @@ def _create_session_from_env() -> Session:
     
     # Authentication: prefer private key if available, otherwise use password
     # NOTE: Haven't tested key pair auth yet
-    if os.environ.get("SNOWFLAKE_PRIVATE_KEY_PATH"):
-        # Key-pair authentication
-        private_key_path = os.environ["SNOWFLAKE_PRIVATE_KEY_PATH"]
+    # if os.environ.get("SNOWFLAKE_PRIVATE_KEY_PATH"):
+    #     # Key-pair authentication
+    #     private_key_path = os.environ["SNOWFLAKE_PRIVATE_KEY_PATH"]
         
-        with open(private_key_path, "rb") as key_file:
-            private_key_data = key_file.read()
+    #     with open(private_key_path, "rb") as key_file:
+    #         private_key_data = key_file.read()
+
+    if os.environ.get("SNOWFLAKE_PRIVATE_KEY_RAW"):
+
+        private_key_data = os.environ["SNOWFLAKE_PRIVATE_KEY_RAW"].encode()
         
         from cryptography.hazmat.backends import default_backend
         from cryptography.hazmat.primitives import serialization
