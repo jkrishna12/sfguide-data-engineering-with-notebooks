@@ -16,13 +16,18 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     2. Uploads all files from the local folder to the stage
     3. Creates or updates the notebook project from the staged files
     """
-    # Step 1: Get a temporary stage from the session
-    session_stage = session.get_session_stage()
-    print(f"Using session stage: {session_stage}")
+    # Step 1: Create a stage for to place notebook files ine
+    # session_stage = session.get_session_stage()
+    # print(f"Using session stage: {session_stage}")
+
+    stage_name = f"{database_name}.{schema_name}.NOTEBOOK_DEPLOY_STAGE"
+    session.sql(f"CREATE STAGE IF NOT EXISTS {stage_name}").collect()
+    stage_path = f"@{stage_name}"
+
 
     # Step 2: Upload all files from the local folder to the stage
     print(f"Uploading files from: {local_folder_path}")
-    session.file.put(f"file://{local_folder_path}/*", session_stage, auto_compress=False, overwrite=True)
+    session.file.put(f"file://{local_folder_path}/*", stage_path, auto_compress=False, overwrite=True)
 
     # Step 3: Check if the notebook project already exists
     print(f"Checking if notebook project exists: {notebook_project_name}")
@@ -32,7 +37,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 
     # Step 4: Create or alter the notebook project
     full_project_name = f"{database_name}.{schema_name}.{notebook_project_name}"
-    stage_path = session_stage
+    # stage_path = session_stage
 
     if project_exists:
         print(f"Notebook project exists, adding new version...")
@@ -57,3 +62,5 @@ if __name__ == "__main__":
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
     else:
         print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project> <local_folder_path>")
+
+

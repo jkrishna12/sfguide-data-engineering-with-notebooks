@@ -116,3 +116,9 @@ list @integrations.frostbyte_raw_stage;
 
 describe stage integrations.frostbyte_raw_stage;
 
+
+show grants to role demo_role;
+
+drop notebook project if exists DEMO_DB.DEV_SCHEMA.DEMO_PIPELINES_NP;
+
+drop notebook project if exists DEMO_DB.PROD_SCHEMA.DEMO_PIPELINES_NP;
