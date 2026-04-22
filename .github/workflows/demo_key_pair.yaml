@@ -30,7 +30,7 @@ jobs:
       - name: Deploy notebooks
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_SRV_USER }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_SRV_USER }} 
           SNOWFLAKE_PRIVATE_KEY_RAW: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_RAW }}
           SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.PRIVATE_KEY_PASSPHRASE }}
           SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}

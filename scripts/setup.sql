@@ -115,4 +115,3 @@ SELECT * FROM DIRECTORY('@demo_db.additional_packages.python_packages');
 list @integrations.frostbyte_raw_stage;
 
 describe stage integrations.frostbyte_raw_stage;
-
